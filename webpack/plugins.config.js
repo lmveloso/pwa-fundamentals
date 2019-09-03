@@ -10,13 +10,33 @@ var BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
 
 const extractSass = require('./extract-sass');
 const html = require('./html.config');
+const CopyPlugin = require('copy-webpack-plugin');
+var HtmlWebpackTagsPlugin = require('html-webpack-tags-plugin');
 
-module.exports = function(env, options) {
+module.exports = function (env, options) {
   let plugins = [
     // extractSass,
     new HtmlWebpackPlugin(html),
     new ManifestPlugin({
       fileName: 'asset-manifest.json'
+    }),
+    new CopyPlugin([
+      {
+        from: 'client/web-app-manifest.json',
+        to: '[name].[ext]',
+        toType: 'template'
+      },
+      {
+        from: 'client/sw/sw.js',
+        to: '[name].[ext]',
+        toType: 'template'
+      }]),
+    new HtmlWebpackTagsPlugin({
+      links: [{
+        path: 'web-app-manifest.json', useHash: false, attributes: {
+          rel: 'manifest'
+        }
+      }], append: true
     })
   ];
   if (process.env.ANALYZE) {

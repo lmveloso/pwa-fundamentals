@@ -21,6 +21,16 @@ module.exports = function() {
         ]
       },
       {
+        type: 'javascript/auto',
+        test: /\.(json|html)/,
+        exclude: /node_modules/,
+        use: [{
+          loader: 'file-loader',
+          options: { name: '[name].[ext]' },
+        }],
+      },
+
+      {
         test: /\.scss$/,
         use: [
           'style-loader', // creates style nodes from JS strings
